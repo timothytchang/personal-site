@@ -125,9 +125,14 @@ if ('scrollRestoration' in history) {
             return;
         }
 
-        const hash = window.location.hash.slice(1);
+        // Prefer the hash we stashed before the browser had a chance to see it
+        // (see inline script in index.html <head>); fall back to current hash.
+        const hash = window.__initialHash || window.location.hash.slice(1);
         if (hash) {
             switchSection(hash, false);
+            // Restore the hash in the URL bar (it was stripped to prevent
+            // the browser's native fragment-scroll on load).
+            history.replaceState(null, '', `#${hash}`);
         } else {
             switchSection('about', false);
         }
@@ -150,9 +155,6 @@ if ('scrollRestoration' in history) {
                 switchSection(hash, false);
             }
         }
-        // Always force scroll to top after full load — belt and suspenders
-        // against any lingering browser fragment-scroll.
-        window.scrollTo(0, 0);
     });
 })();
 

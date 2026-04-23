@@ -33,6 +33,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css?v=30">
+
+    <!-- Strip hash before browser renders so it can't fragment-scroll.
+         nav.js reads __initialHash and restores the URL after switching. -->
+    <script>
+        (function () {
+            if (window.location.hash) {
+                window.__initialHash = window.location.hash.slice(1);
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+        })();
+    </script>
 </head>
 <body>
     <header>
@@ -766,7 +777,7 @@
         </section>
     </main>
 
-    <script src="js/nav.js?v=8"></script>
+    <script src="js/nav.js?v=9"></script>
     <script src="js/gallery.js?v=2"></script>
     <script src="js/recipe.js?v=3"></script>
 </body>
