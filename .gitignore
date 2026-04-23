@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+*.icloud
+.AppleDouble
+.LSOverride
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local-only prototype (do not deploy)
+essay-prototype.html

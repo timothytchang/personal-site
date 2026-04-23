@@ -1,0 +1,442 @@
+/* ============================================
+   DIETER RAMS / BRAUN 1960s DESIGN SYSTEM
+   Matte Laboratory Equipment Aesthetic
+   ============================================ */
+
+/* === RESET === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* === ROOT VARIABLES === */
+:root {
+    /* Color Palette */
+    --chassis: #F4F4F0;              /* Matte off-white/grey background */
+    --ink: #1A1A1A;                  /* Soft black - main text */
+    --metadata-grey: #666666;        /* Dark grey - metadata */
+    --signal-orange: #FF4400;        /* International orange - interactive */
+
+    /* Typography */
+    --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --tracking: -0.025em;            /* Tightened for manual aesthetic */
+
+    /* Spacing */
+    --unit: 8px;
+    --gap-small: calc(var(--unit) * 2);
+    --gap-medium: calc(var(--unit) * 4);
+    --gap-large: calc(var(--unit) * 6);
+
+    /* Control Strip */
+    --strip-height: 64px;
+}
+
+/* === BASE === */
+html {
+    background: var(--chassis);
+    color: var(--ink);
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: var(--tracking);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background: var(--chassis);
+    padding-top: var(--strip-height);
+}
+
+/* === CONTROL STRIP (Header) === */
+.control-strip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--strip-height);
+    background: var(--chassis);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.12);
+    z-index: 1000;
+}
+
+.control-strip-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 var(--gap-large);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+/* === NAVIGATION BUTTONS === */
+.nav-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+.nav-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid rgba(26, 26, 26, 0.12);
+    color: var(--metadata-grey);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.nav-button:hover {
+    background: rgba(26, 26, 26, 0.02);
+    border-color: rgba(26, 26, 26, 0.2);
+}
+
+.nav-button.active {
+    color: var(--ink);
+    border-color: rgba(26, 26, 26, 0.2);
+}
+
+/* Indicator dot (orange when active) */
+.nav-button .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.15s ease;
+}
+
+.nav-button.active .indicator {
+    background: var(--signal-orange);
+}
+
+/* === MAIN CHASSIS === */
+.chassis {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--gap-large);
+    min-height: calc(100vh - var(--strip-height));
+}
+
+/* === SECTION MANAGEMENT === */
+.section {
+    display: none;
+    animation: fadeIn 0.2s ease;
+}
+
+.section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* === CONTENT GRID (1/3 + 2/3) === */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--gap-large);
+    margin-bottom: var(--gap-large);
+}
+
+/* === METADATA COLUMN (Left 1/3) === */
+.metadata {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+}
+
+.meta-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--metadata-grey);
+}
+
+.meta-value {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+}
+
+.meta-value.status-active {
+    color: var(--signal-orange);
+}
+
+/* === MAIN CONTENT COLUMN (Right 2/3) === */
+.main-content {
+    max-width: 720px;
+}
+
+/* === TYPOGRAPHY === */
+h1 {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: var(--tracking);
+    line-height: 1.2;
+    margin-bottom: var(--gap-medium);
+    color: var(--ink);
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: var(--tracking);
+    margin-top: var(--gap-large);
+    margin-bottom: var(--gap-small);
+    color: var(--ink);
+}
+
+p {
+    margin-bottom: var(--gap-small);
+    color: var(--ink);
+}
+
+p.intro {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: var(--gap-medium);
+}
+
+/* === SPEC LIST (Technical Data Sheet) === */
+.spec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: var(--gap-medium) 0;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+.spec-label {
+    font-size: 13px;
+    color: var(--metadata-grey);
+}
+
+.spec-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+}
+
+/* === RADIO TUNER TIMELINE === */
+.timeline-tuner {
+    margin: var(--gap-large) 0;
+    padding: var(--gap-medium);
+    background: rgba(26, 26, 26, 0.02);
+    border: 1px solid rgba(26, 26, 26, 0.08);
+}
+
+.tuner-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--metadata-grey);
+    margin-bottom: var(--gap-small);
+}
+
+/* Tuner scale with time markers */
+.tuner-scale {
+    position: relative;
+    height: 32px;
+    margin-bottom: 4px;
+}
+
+.scale-marker {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.marker-line {
+    width: 1px;
+    height: 12px;
+    background: rgba(26, 26, 26, 0.2);
+    margin-bottom: 4px;
+}
+
+.marker-label {
+    font-size: 10px;
+    color: var(--metadata-grey);
+    font-family: 'Courier New', monospace;
+}
+
+/* Tuner track with phase blocks */
+.tuner-track {
+    position: relative;
+    height: 40px;
+    background: rgba(26, 26, 26, 0.03);
+    border: 1px solid rgba(26, 26, 26, 0.08);
+    display: flex;
+}
+
+.phase-block {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--chassis);
+}
+
+.phase-block.prep {
+    background: rgba(102, 102, 102, 0.15);
+}
+
+.phase-block.sear {
+    background: rgba(102, 102, 102, 0.25);
+}
+
+.phase-block.braise {
+    background: rgba(255, 68, 0, 0.08);
+}
+
+.phase-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+/* === METHOD STEPS === */
+.method-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+    margin-top: var(--gap-medium);
+}
+
+.step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--gap-small);
+    padding: var(--gap-small) 0;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+.step-number {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--metadata-grey);
+    font-family: 'Courier New', monospace;
+}
+
+.step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.step-title {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+}
+
+.step-content p {
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0;
+}
+
+/* === LINKS === */
+a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 68, 0, 0.3);
+    transition: border-color 0.15s ease;
+}
+
+a:hover {
+    border-bottom-color: var(--signal-orange);
+}
+
+/* === PHOTO PLACEHOLDER === */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--gap-small);
+    margin-top: var(--gap-medium);
+}
+
+.photo-placeholder {
+    aspect-ratio: 3/2;
+    background: rgba(26, 26, 26, 0.04);
+    border: 1px solid rgba(26, 26, 26, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--metadata-grey);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: var(--gap-medium);
+    }
+
+    .metadata {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--gap-small);
+    }
+
+    .meta-block {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .nav-buttons {
+        display: none;
+    }
+
+    .control-strip-inner {
+        padding: 0 var(--gap-medium);
+    }
+}
+
+/* === UTILITY === */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
