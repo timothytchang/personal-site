@@ -1,3 +1,9 @@
+// Disable browser's native scroll restoration so JS fully controls scroll position.
+// Without this, browser's fragment-scroll on initial load lands mid-section.
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
 // Navigation - switch sections
 (function() {
     const navLinks = document.querySelectorAll('.nav-link');
@@ -144,6 +150,9 @@
                 switchSection(hash, false);
             }
         }
+        // Always force scroll to top after full load — belt and suspenders
+        // against any lingering browser fragment-scroll.
+        window.scrollTo(0, 0);
     });
 })();
 
