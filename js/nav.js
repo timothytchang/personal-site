@@ -27,7 +27,7 @@ if ('scrollRestoration' in history) {
         if (isTransitioning) return;
 
         const currentSection = document.querySelector('.section.active');
-        const targetSection = document.getElementById(targetId);
+        const targetSection = document.querySelector(`[data-section="${targetId}"]`);
         const targetLink = document.querySelector(`a[href="#${targetId}"]`);
 
         if (!targetSection) return;
@@ -93,7 +93,7 @@ if ('scrollRestoration' in history) {
         const link = e.target.closest('a[href^="#"]');
         if (link && !link.classList.contains('nav-link')) {
             const targetId = link.getAttribute('href').slice(1);
-            if (document.getElementById(targetId)) {
+            if (document.querySelector(`[data-section="${targetId}"]`)) {
                 e.preventDefault();
                 switchSection(targetId, true);
                 history.pushState(null, '', `#${targetId}`);
@@ -151,7 +151,7 @@ if ('scrollRestoration' in history) {
         const hash = window.location.hash.slice(1);
         if (hash && hash !== 'about') {
             const currentActive = document.querySelector('.section.active');
-            if (currentActive && currentActive.id !== hash) {
+            if (currentActive && currentActive.dataset.section !== hash) {
                 switchSection(hash, false);
             }
         }

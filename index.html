@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/style.css?v=31">
+    <link rel="stylesheet" href="css/style.css?v=32">
 
     <!-- Strip hash before browser renders so it can't fragment-scroll.
          nav.js reads __initialHash and restores the URL after switching. -->
@@ -66,7 +66,7 @@
     </header>
 
     <main>
-        <section id="about" class="section active">
+        <section data-section="about" class="section active">
             <div class="about-grid">
                 <aside class="about-meta">
                 </aside>
@@ -185,7 +185,7 @@
             </div>
         </section>
 
-        <section id="recipes" class="section">
+        <section data-section="recipes" class="section">
             <div class="recipe-grid">
                 <aside class="recipe-sidebar">
                     <div class="recipe-tabs">
@@ -489,7 +489,7 @@
             </div>
         </section>
 
-        <section id="engineering" class="section">
+        <section data-section="engineering" class="section">
             <div class="essay-container">
                 <h2 class="essay-title">On Great Quantum Engineering</h2>
                 <p class="essay-label">A definite optimist's philosophy on quantum systems engineering</p>
@@ -737,7 +737,7 @@
             </div>
         </section>
 
-        <section id="photographs" class="section">
+        <section data-section="photographs" class="section">
             <div class="gallery-grid">
                 <div class="gallery-hero">
                     <img src="Photographs/headerimage.avif" alt="Landscape photography" class="gallery-hero-image">
@@ -777,7 +777,7 @@
         </section>
     </main>
 
-    <script src="js/nav.js?v=9"></script>
+    <script src="js/nav.js?v=10"></script>
     <script src="js/gallery.js?v=2"></script>
     <script src="js/recipe.js?v=3"></script>
 </body>
