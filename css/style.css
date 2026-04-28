@@ -126,7 +126,7 @@ button {
 }
 
 /* ==========================================================================
-   Base Typography - Geist Mono, weights 400/500 only
+   Base Typography - Helvetica, weights 400/500 only
    ========================================================================== */
 body {
     font-family: var(--font-primary);
@@ -441,6 +441,10 @@ main {
     font-size: var(--type-body);
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-meta);
+    color: var(--color-text);
+}
+
+.spec-key a {
     color: var(--color-text);
 }
 
