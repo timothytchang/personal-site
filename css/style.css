@@ -200,9 +200,14 @@ em, i {
 
 /* ==========================================================================
    12-Column Asymmetric Grid System
-   Desktop: Meta (1-3) | Content (4-9) | Void (10-12)
+   Desktop: Meta (1-4) | Content (5-9) | Void (10-12)
+   Single shared declaration — every section-level container composes onto this.
    ========================================================================== */
-.grid {
+.grid,
+.about-grid,
+.recipe-grid,
+.essay-container,
+.gallery-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: var(--grid-gap);
@@ -210,6 +215,13 @@ em, i {
     margin: 0 auto;
     padding-left: var(--grid-margin);
     padding-right: var(--grid-margin);
+}
+
+/* Named-area template for the about section's repeating meta|content rows.
+   Makes the meta/content asymmetry self-documenting in CSS. The divider rows
+   keep their grid-column override since a bare <hr> has no area. */
+.about-grid {
+    grid-template-areas: "meta meta meta meta content content content content content content content content";
 }
 
 /* ==========================================================================
@@ -277,7 +289,7 @@ header.header-hidden {
 }
 
 nav {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
     display: flex;
     gap: var(--space-32);
     align-items: baseline;
@@ -346,20 +358,10 @@ main {
 
 
 /* ==========================================================================
-   About Section
+   About Section — uses shared 12-col grid with named meta/content areas
    ========================================================================== */
-.about-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-left: var(--grid-margin);
-    padding-right: var(--grid-margin);
-}
-
 .about-meta {
-    grid-column: 1 / 5;
+    grid-area: meta;
 }
 
 .about-meta-label {
@@ -372,7 +374,7 @@ main {
 }
 
 .about-content {
-    grid-column: 5 / 13;
+    grid-area: content;
 }
 
 .about-title {
@@ -392,7 +394,7 @@ main {
 }
 
 .about-image-container {
-    grid-column: 5 / 13;
+    grid-area: content;
 }
 
 .about-image-container img {
@@ -485,18 +487,8 @@ main {
 }
 
 /* ==========================================================================
-   Recipe/Temporal Timeline Section
+   Recipe/Temporal Timeline Section — uses shared 12-col grid
    ========================================================================== */
-.recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-left: var(--grid-margin);
-    padding-right: var(--grid-margin);
-}
-
 .recipe-sidebar {
     grid-column: 1 / 5;
     position: sticky;
@@ -529,7 +521,7 @@ main {
 }
 
 .recipe-content {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
     min-width: 0;
 }
 
@@ -666,7 +658,7 @@ main {
 }
 
 .dish-photo-figure {
-    grid-column: 9 / 13;
+    grid-column: 9 / -1;
     margin: 0;
     align-self: start;
     display: flex;
@@ -766,7 +758,7 @@ main {
 
 .mise-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--space-16);
 }
 
@@ -1056,18 +1048,8 @@ main {
 }
 
 /* ==========================================================================
-   Engineering/Essay Section
+   Engineering/Essay Section — uses shared 12-col grid
    ========================================================================== */
-.essay-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-left: var(--grid-margin);
-    padding-right: var(--grid-margin);
-}
-
 .essay-date {
     font-size: var(--type-meta);
     font-weight: var(--font-weight-regular);
@@ -1077,7 +1059,7 @@ main {
 }
 
 .essay-title {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
     font-size: 42px;
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-h1);
@@ -1087,7 +1069,7 @@ main {
 }
 
 .essay-label {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
     font-size: var(--type-body);
     font-weight: var(--font-weight-regular);
     letter-spacing: var(--tracking-meta);
@@ -1097,7 +1079,7 @@ main {
 }
 
 .essay-epigraph {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
     font-style: italic;
     margin-bottom: var(--space-64);
     padding-left: 0;
@@ -1111,29 +1093,31 @@ main {
     font-size: var(--type-body);
 }
 
+/* Subgrid chain: .essay-container (12 cols) → .essay-body → .essay-section-group → .essay-row.
+   Each level inherits the outer 12-col tracks via subgrid, so margin (cols 1–4)
+   and text (cols 5–12) actually align with the page grid rather than re-creating
+   their own 12 fr-tracks per row. */
 .essay-body {
-    /* Full-width block container; inner .essay-row grids split into
-       margin (cols 1–4) and text (cols 5–12). */
-    grid-column: 1 / 13;
-    display: block;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    row-gap: var(--space-16);
 }
 
-.essay-body p {
-    margin-bottom: var(--space-16);
-}
-
-.essay-body p:last-child {
-    margin-bottom: 0;
+.essay-section-group {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    row-gap: var(--space-16);
 }
 
 /* ==========================================================================
    Essay Marginalia — left-column reveal system
    ========================================================================== */
 .essay-row {
+    grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    margin-bottom: var(--space-16);
+    grid-template-columns: subgrid;
     align-items: start;
 }
 
@@ -1148,7 +1132,7 @@ main {
 }
 
 .essay-row .essay-text {
-    grid-column: 5 / 13;
+    grid-column: 5 / -1;
 }
 
 .essay-row .essay-text p {
@@ -1300,20 +1284,10 @@ main {
 }
 
 /* ==========================================================================
-   Photographs/Gallery Section
+   Photographs/Gallery Section — uses shared 12-col grid
    ========================================================================== */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--grid-gap);
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-left: var(--grid-margin);
-    padding-right: var(--grid-margin);
-}
-
 .gallery-hero {
-    grid-column: 1 / 13;
+    grid-column: 1 / -1;
     margin-bottom: var(--space-16);
 }
 
@@ -1325,7 +1299,7 @@ main {
 }
 
 .gallery-hero-text {
-    grid-column: 7 / 13;
+    grid-column: 7 / -1;
     font-size: 42px;
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-h1);
@@ -1335,7 +1309,7 @@ main {
 }
 
 .gallery-meta {
-    grid-column: 1 / 13;
+    grid-column: 1 / -1;
     margin-bottom: var(--space-48);
 }
 
@@ -1377,7 +1351,7 @@ main {
 }
 
 .gallery-content {
-    grid-column: 1 / 13;
+    grid-column: 1 / -1;
 }
 
 .gallery-viewer {
@@ -1516,7 +1490,7 @@ main {
 hr.divider {
     border: none;
     margin: 0;
-    grid-column: 1 / 13;
+    grid-column: 1 / -1;
     height: 0;
 }
 
@@ -1555,6 +1529,13 @@ hr.divider {
     .recipe-grid,
     .gallery-grid {
         grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Redefine areas for the 4-col mobile grid; meta stacks above content. */
+    .about-grid {
+        grid-template-areas:
+            "meta meta meta meta"
+            "content content content content";
     }
 
     .header-inner {
