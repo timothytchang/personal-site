@@ -1754,3 +1754,10 @@ hr.divider {
     color: var(--color-accent);
     margin-top: var(--space-12);
 }
+
+/* Blank line before each essay section — rows opening with a movement header
+   (or a section-group wrapper), except the first section of the body. */
+.essay-body > .essay-row:has(.movement-header):not(:first-child),
+.essay-body > .essay-section-group:not(:first-child) {
+    margin-top: var(--space-32);
+}
