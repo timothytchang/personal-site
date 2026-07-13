@@ -38,7 +38,6 @@
     async function unlock(password) {
         const html = await decrypt(await fetchBlob(), password);
         container.innerHTML = html;
-        sessionStorage.setItem('zermatt1', password);
     }
 
     form.addEventListener('submit', async (e) => {
@@ -52,9 +51,6 @@
         }
     });
 
-    // Skip the gate on refresh within the same tab session.
-    const saved = sessionStorage.getItem('zermatt1');
-    if (saved) {
-        unlock(saved).catch(() => sessionStorage.removeItem('zermatt1'));
-    }
+    // Cleanup for visitors who unlocked while the old auto-unlock shipped.
+    sessionStorage.removeItem('zermatt1');
 })();
