@@ -30,7 +30,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=5">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5">
 
-    <link rel="stylesheet" href="css/style.css?v=35">
+    <link rel="stylesheet" href="css/style.css?v=36">
 
     <!-- Strip hash before browser renders so it can't fragment-scroll.
          nav.js reads __initialHash and restores the URL after switching. -->
@@ -730,6 +730,27 @@
             </div>
         </section>
 
+        <!-- Unlisted draft — reachable only via #zermatt1, password-gated (see js/zermatt1.js) -->
+        <section data-section="zermatt1" class="section">
+            <div class="essay-container" id="zermatt1-container">
+                <div class="essay-body">
+                    <div class="essay-row">
+                        <aside class="essay-margin">
+                            <p class="movement-header">Private Draft</p>
+                        </aside>
+                        <div class="essay-text">
+                            <p>This essay is an unlisted working draft.</p>
+                            <form id="zermatt1-form" class="gate-form">
+                                <input type="password" id="zermatt1-password" placeholder="Password" aria-label="Password" autocomplete="off">
+                                <button type="submit">Enter</button>
+                            </form>
+                            <p class="gate-error" id="zermatt1-error" hidden>Incorrect password.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section data-section="photographs" class="section">
             <div class="gallery-grid">
                 <div class="gallery-hero">
@@ -770,6 +791,7 @@
         </section>
     </main>
 
+    <script src="js/zermatt1.js?v=1"></script>
     <script src="js/nav.js?v=10"></script>
     <script src="js/gallery.js?v=2"></script>
     <script src="js/recipe.js?v=3"></script>

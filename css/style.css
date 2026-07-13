@@ -1703,3 +1703,54 @@ hr.divider {
         margin-top: var(--header-height);
     }
 }
+
+/* ==========================================================================
+   Password gate — unlisted drafts (#zermatt1)
+   ========================================================================== */
+.gate-form {
+    display: flex;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+}
+
+.gate-form input {
+    font-family: var(--font-primary);
+    font-size: var(--type-body);
+    letter-spacing: var(--tracking-body);
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    padding: var(--space-8) var(--space-12);
+    width: 240px;
+    max-width: 100%;
+    outline: none;
+}
+
+.gate-form input:focus {
+    border-color: var(--color-accent);
+}
+
+.gate-form button {
+    font-family: var(--font-primary);
+    font-size: var(--type-body);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-body);
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    padding: var(--space-8) var(--space-16);
+    cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease;
+}
+
+.gate-form button:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.gate-error {
+    color: var(--color-accent);
+    margin-top: var(--space-12);
+}
