@@ -395,8 +395,8 @@ function buildChassis(THREE, materials = {}) {
 }
 
 function buildConcreteFloor(THREE,Reflector,scene){
- const shader={uniforms:{tDiffuse:{value:null},color:{value:new THREE.Color()},textureMatrix:{value:new THREE.Matrix4()},reveal:{value:0},lights:{value:0},contact:{value:1}},vertexShader:`uniform mat4 textureMatrix;varying vec4 projected;varying vec3 world;void main(){projected=textureMatrix*vec4(position,1.);world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`
- uniform sampler2D tDiffuse;uniform float reveal,lights,contact;varying vec4 projected;varying vec3 world;
+ const shader={uniforms:{tDiffuse:{value:null},color:{value:new THREE.Color()},textureMatrix:{value:new THREE.Matrix4()},reveal:{value:0},lights:{value:0},brakes:{value:0},contact:{value:1}},vertexShader:`uniform mat4 textureMatrix;varying vec4 projected;varying vec3 world;void main(){projected=textureMatrix*vec4(position,1.);world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`
+ uniform sampler2D tDiffuse;uniform float reveal,lights,brakes,contact;varying vec4 projected;varying vec3 world;
  float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
  float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
  void main(){
@@ -408,19 +408,19 @@ function buildConcreteFloor(THREE,Reflector,scene){
  float pool=exp(-dot(world.xz*vec2(.18,.24),world.xz*vec2(.18,.24)));
  vec3 concrete=vec3(.063,.067,.066)*( .78+.38*mottle+.035*grain)*reveal*pool;
  float shadow=exp(-pow(world.x*.47,4.)-pow(world.z*1.35,4.))*contact;concrete*=1.-.72*shadow;
- vec3 spill=vec3(0.);for(int i=0;i<2;i++){float s=i==0?-1.:1.;vec2 r=world.xz-vec2(2.15,s*.67);spill+=vec3(.28,.001,.004)*exp(-dot(r*vec2(.9,1.8),r*vec2(.9,1.8)))*lights;vec2 f=world.xz-vec2(-4.8,s*.7);spill+=vec3(.055,.071,.088)*exp(-dot(f*vec2(.32,1.1),f*vec2(.32,1.1)))*lights;}
+ vec3 spill=vec3(0.);for(int i=0;i<2;i++){float s=i==0?-1.:1.;vec2 r=world.xz-vec2(2.15,s*.67);spill+=vec3(.28,.001,.004)*exp(-dot(r*vec2(.9,1.8),r*vec2(.9,1.8)))*brakes;vec2 f=world.xz-vec2(-4.8,s*.7);spill+=vec3(.055,.071,.088)*exp(-dot(f*vec2(.32,1.1),f*vec2(.32,1.1)))*lights;}
  gl_FragColor=vec4(concrete+reflection*(.10+.22*fresnel)+spill,1.);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
  }`};
  const floor=new Reflector(new THREE.PlaneGeometry(40,40),{textureWidth:1024,textureHeight:1024,clipBias:.003,multisample:0,shader});floor.rotation.x=-Math.PI/2;floor.position.y=-.012;scene.add(floor);
- return {update(cue,progress){floor.material.uniforms.reveal.value=cue.reveal;floor.material.uniforms.lights.value=cue.lights*(1-Math.min(1,progress/.35));floor.material.uniforms.contact.value=1-Math.min(1,progress);},dispose(){floor.dispose();floor.geometry.dispose();}};
+ return {update(cue,progress){floor.material.uniforms.reveal.value=cue.reveal;floor.material.uniforms.brakes.value=cue.brakes*(1-Math.min(1,progress/.35));floor.material.uniforms.lights.value=cue.lights*(1-Math.min(1,progress/.35));floor.material.uniforms.contact.value=1-Math.min(1,progress);},dispose(){floor.dispose();floor.geometry.dispose();}};
 }
 
 // Time in seconds, driven by the media clock rather than independent timers.
 function cinematicCue(t){
  const smooth=(a,b)=>{const x=Math.max(0,Math.min(1,(t-a)/(b-a)));return x*x*(3-2*x);};
- return {lights:smooth(5,5.18),rotate:t>=11.5,reveal:smooth(6,11.5),fog:(1-smooth(11.5,15.5))*.85,emergence:smooth(.4,3),engineFade:1-smooth(8.5,11.5)};
+ return {brakes:smooth(4.5,4.68),lights:smooth(5,5.18),rotate:t>=11.5,reveal:smooth(6,11.5),fog:(1-smooth(11.5,15.5))*.85,emergence:smooth(.4,3),engineFade:1-smooth(8.5,11.5)};
 }
 function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,ambient,stage,holo,setAuto}){
  const audio=root.querySelector('#je-audio'),start=root.querySelector('#je-start'),mute=root.querySelector('#je-mute');
@@ -439,10 +439,10 @@ function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,am
   const white=new THREE.SpotLight('#d9efff',0,14,.22,.6,1.25);white.position.set(-1.91,.66,side*.66);white.target.position.set(-10,.2,side*.82);scene.add(white,white.target);frontLights.push(white);
  }
  const renderTarget=new THREE.WebGLRenderTarget(1,1,{depthBuffer:true,type:THREE.HalfFloatType});renderTarget.depthTexture=new THREE.DepthTexture(1,1,THREE.UnsignedIntType);
- const uniforms={colorMap:{value:renderTarget.texture},depthMap:{value:renderTarget.depthTexture},inverseProjection:{value:camera.projectionMatrixInverse},cameraWorld:{value:camera.matrixWorld},eye:{value:camera.position},clock:{value:0},density:{value:0},lit:{value:0},emergence:{value:0}};
+ const uniforms={colorMap:{value:renderTarget.texture},depthMap:{value:renderTarget.depthTexture},inverseProjection:{value:camera.projectionMatrixInverse},cameraWorld:{value:camera.matrixWorld},eye:{value:camera.position},clock:{value:0},density:{value:0},lit:{value:0},brakeLit:{value:0},emergence:{value:0}};
  const fogMaterial=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,uniforms,vertexShader:`varying vec2 uvScreen;void main(){uvScreen=uv;gl_Position=vec4(position.xy,0.,1.);}`,fragmentShader:`
  precision highp float;
- varying vec2 uvScreen;uniform sampler2D colorMap,depthMap;uniform mat4 inverseProjection,cameraWorld;uniform vec3 eye;uniform float clock,density,lit,emergence;
+ varying vec2 uvScreen;uniform sampler2D colorMap,depthMap;uniform mat4 inverseProjection,cameraWorld;uniform vec3 eye;uniform float clock,density,lit,brakeLit,emergence;
  float hash(vec3 p){p=fract(p*.3183099+vec3(.1,.2,.3));p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
  float noise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
  float cloud(vec3 p){p+=vec3(clock*.07,0.,clock*.035);return .58*noise(p*.8)+.28*noise(p*1.9)+.14*noise(p*4.1);}
@@ -458,7 +458,7 @@ function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,am
     float side=j==0?-1.:1.;vec3 rear=p-vec3(2.04,.73,side*.67);float red=exp(-dot(rear*vec3(.45,1.1,.85),rear*vec3(.45,1.1,.85)))*smoothstep(-.3,.25,rear.x);
     vec3 front=p-vec3(-1.91,.66,side*.66);float reach=-front.x;float radius=.11+max(reach,0.)*.21;
     float beam=exp(-dot(front.yz,front.yz)/(radius*radius))*smoothstep(0.,.18,reach)*exp(-max(reach,0.)*.16);
-    light+=lit*(vec3(3.8,.008,.026)*(red*.35+exp(-dot(rear*vec3(.85,2.,2.2),rear*vec3(.85,2.,2.2))))+vec3(.46,.62,.8)*beam*1.8);
+    light+=brakeLit*(vec3(3.8,.008,.026)*(red*.35+exp(-dot(rear*vec3(.85,2.,2.2),rear*vec3(.85,2.,2.2)))))+lit*vec3(.46,.62,.8)*beam*1.8;
    }
    float alpha=1.-exp(-local*stepSize);glow+=trans*alpha*light;trans*=1.-alpha;
   }
@@ -468,15 +468,15 @@ function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,am
  }`});
  const screen=new THREE.Scene();screen.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),fogMaterial));const screenCamera=new THREE.Camera(),size=new THREE.Vector2();
  return {tick(dt,progress){
-  const t=started?audio.currentTime:0,cue=cinematicCue(t);root.dataset.introTime=t.toFixed(3);root.dataset.headlights=String(cue.lights>0);root.dataset.playback=started?(audio.paused?'paused':'playing'):root.dataset.playback;
+  const t=started?audio.currentTime:0,cue=cinematicCue(t);root.dataset.introTime=t.toFixed(3);root.dataset.headlights=String(cue.lights>0);root.dataset.brakeLights=String(cue.brakes>0);root.dataset.playback=started?(audio.paused?'paused':'playing'):root.dataset.playback;
   if(startGlow&&started&&t-startGlowAt>=.85){start.hidden=true;startGlow=false;}
   if(cue.rotate&&!rotationTriggered){setAuto(true);rotationTriggered=true;}
   const activeDelta=started&&!audio.paused?Math.max(0,Math.min(t-lastTime,.1)):0;lastTime=t;
   scene.environmentIntensity=.004+.996*cue.reveal;lamp.intensity=3.7*cue.reveal;fill.intensity=1.3*cue.reveal;ambient.intensity=.6*cue.reveal;
-  materials.red.emissiveIntensity=cue.lights*(5.-3.7*cue.reveal);materials.light.emissiveIntensity=cue.lights*3.;holo.value=0;stage.visible=false;floor?.update(cue,progress);
+  materials.red.emissiveIntensity=cue.brakes*(5.-3.7*cue.reveal);materials.light.emissiveIntensity=cue.lights*3.;holo.value=0;stage.visible=false;floor?.update(cue,progress);
   // Lamps stay on, atmospheric spill clears as the body separates.
-  const attached=1-Math.min(1,progress/.32);rearLights.forEach(l=>l.intensity=cue.lights*2.5*attached);frontLights.forEach(l=>l.intensity=cue.lights*14*attached);
-  uniforms.clock.value=t;uniforms.lit.value=cue.lights*attached;uniforms.density.value=cue.fog*cue.emergence;uniforms.emergence.value=cue.emergence;
+  const attached=1-Math.min(1,progress/.32);rearLights.forEach(l=>l.intensity=cue.brakes*2.5*attached);frontLights.forEach(l=>l.intensity=cue.lights*14*attached);
+  uniforms.clock.value=t;uniforms.lit.value=cue.lights*attached;uniforms.brakeLit.value=cue.brakes*attached;uniforms.density.value=cue.fog*cue.emergence;uniforms.emergence.value=cue.emergence;
   return {delta:audio.ended?dt:activeDelta,ready:started};
  },render(){renderer.getDrawingBufferSize(size);if(renderTarget.width!==size.x||renderTarget.height!==size.y)renderTarget.setSize(size.x,size.y);renderer.setRenderTarget(renderTarget);renderer.render(scene,camera);renderer.setRenderTarget(null);renderer.render(screen,screenCamera);},dispose(){audio.pause();floor?.dispose();renderTarget.dispose();fogMaterial.dispose();}};
 }
