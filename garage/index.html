@@ -421,7 +421,7 @@ function buildConcreteFloor(THREE,Reflector,scene){
 // Time in seconds, driven by the media clock rather than independent timers.
 function cinematicCue(t){
  const smooth=(a,b)=>{const x=Math.max(0,Math.min(1,(t-a)/(b-a)));return x*x*(3-2*x);};
- return {lights:smooth(5,5.18),rotate:t>=11.5,reveal:smooth(6,11.5),fog:(1-smooth(7.5,11.5))*.85,emergence:smooth(.4,3),engineFade:1-smooth(8.5,11.5)};
+ return {lights:smooth(5,5.18),rotate:t>=11.5,reveal:smooth(6,11.5),fog:(1-smooth(11.5,15.5))*.85,emergence:smooth(.4,3),engineFade:1-smooth(8.5,11.5)};
 }
 function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,ambient,stage,holo,setAuto}){
  const audio=root.querySelector('#je-audio'),start=root.querySelector('#je-start'),mute=root.querySelector('#je-mute');
