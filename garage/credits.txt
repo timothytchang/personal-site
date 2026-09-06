@@ -1,0 +1,6 @@
+Jaguar F-Type body by Mona x Supercars (Car2022).
+Source: https://sketchfab.com/3d-models/jaguar-f-type-b338091497c64d31bef9bd7de49ade81
+Licensed CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+Changes: geometry reduction, panel separation, petrol materials, cognac interior, animated opening/disassembly. Wheels, powertrain and chassis are illustrative reconstructions.
+Soundtrack: Nightcall — Kavinsky. Engine recording supplied by Timo Chang. Audio edited and mixed for this garage scene.
+Three.js and Lucide are MIT-licensed libraries.
