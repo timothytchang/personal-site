@@ -425,14 +425,14 @@ function cinematicCue(t){
 }
 function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,ambient,stage,holo,setAuto}){
  const audio=root.querySelector('#je-audio'),start=root.querySelector('#je-start'),mute=root.querySelector('#je-mute');
- let started=false,rotationTriggered=false,lastTime=0;
+ let started=false,rotationTriggered=false,lastTime=0,startGlow=false,startGlowAt=0;
  const syncMute=()=>{mute.setAttribute('aria-label',audio.muted?'Unmute':'Mute');mute.setAttribute('aria-pressed',String(audio.muted));root.querySelector('.je-sound-on').hidden=audio.muted;root.querySelector('.je-sound-off').hidden=!audio.muted;};
- const begin=async()=>{try{await audio.play();started=true;start.hidden=true;root.dataset.playback='playing';}catch(error){start.hidden=false;root.dataset.playback='awaiting-gesture';if(error.name!=='NotAllowedError')console.error(error);}};
- start.addEventListener('click',begin);mute.addEventListener('click',()=>{audio.muted=!audio.muted;syncMute();if(!started)begin();});syncMute();
+ const begin=async()=>{try{await audio.play();started=true;start.hidden=!startGlow;root.dataset.playback='playing';}catch(error){startGlow=false;start.disabled=false;start.setAttribute('data-ignited','false');start.hidden=false;root.dataset.playback='awaiting-gesture';if(error.name!=='NotAllowedError')console.error(error);}};
+ start.addEventListener('click',()=>{startGlow=true;startGlowAt=audio.currentTime;start.disabled=true;start.setAttribute('data-ignited','true');return begin();});mute.addEventListener('click',()=>{audio.muted=!audio.muted;syncMute();if(!started)begin();});syncMute();
  // Try only once; a blocked audible launch leaves the ignition control available.
  begin();
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&started){audio.pause();root.dataset.playback='paused';}else if(started)begin();});
- audio.addEventListener('error',()=>{root.dataset.playback='audio-error';start.hidden=false;start.setAttribute('aria-label','Audio unavailable. Retry opening');});
+ audio.addEventListener('error',()=>{root.dataset.playback='audio-error';startGlow=false;start.disabled=false;start.setAttribute('data-ignited','false');start.hidden=false;start.setAttribute('aria-label','Audio unavailable. Retry opening');});
  const floor=typeof Reflector!=='undefined'?buildConcreteFloor(THREE,Reflector,scene):null;
  const rearLights=[],frontLights=[];
  for(const side of [-1,1]){
@@ -470,6 +470,7 @@ function buildCinematic(THREE,{root,scene,camera,renderer,materials,lamp,fill,am
  const screen=new THREE.Scene();screen.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),fogMaterial));const screenCamera=new THREE.Camera(),size=new THREE.Vector2();
  return {tick(dt,progress){
   const t=started?audio.currentTime:0,cue=cinematicCue(t);root.dataset.introTime=t.toFixed(3);root.dataset.headlights=String(cue.lights>0);root.dataset.playback=started?(audio.paused?'paused':'playing'):root.dataset.playback;
+  if(startGlow&&started&&t-startGlowAt>=.85){start.hidden=true;startGlow=false;}
   if(cue.rotate&&!rotationTriggered){setAuto(true);rotationTriggered=true;}
   const activeDelta=started&&!audio.paused?Math.max(0,Math.min(t-lastTime,.1)):0;lastTime=t;
   scene.environmentIntensity=.004+.996*cue.reveal;lamp.intensity=3.7*cue.reveal;fill.intensity=1.3*cue.reveal;ambient.intensity=.6*cue.reveal;
@@ -568,4 +569,22 @@ try {
 #jaguar-exploded .je-ignition:hover{filter:brightness(1.18);background:conic-gradient(from 25deg,#accacb,#46676a 22%,#c1e0df 42%,#4d7479 58%,#d2e9e8 76%,#76999c 92%,#accacb);box-shadow:0 0 0 1px #508086,0 0 20px #58acb322,0 9px 18px #000b,inset 0 1px 2px #fff8}
 #jaguar-exploded .je-ignition:active .je-ignition-face{box-shadow:inset 0 3px 9px #000;filter:brightness(.85)}
 #jaguar-exploded .je-ignition:focus-visible{outline:2px solid #a3d7d7;outline-offset:7px}
+#jaguar-exploded .je-ignition:active,
+#jaguar-exploded .je-ignition[data-ignited="true"]{
+ color:#ffb0a9;filter:none;
+ background:conic-gradient(from 25deg,#f6948c,#91352d 22%,#ffd3c9 42%,#963b35 58%,#ffd9d1 76%,#c34e45 92%,#f6948c);
+ box-shadow:0 0 0 1px #b44238,0 0 16px #ff372e88,0 0 40px #dc211c44,0 9px 18px #000b,inset 0 1px 2px #ffd3ca99;
+}
+#jaguar-exploded .je-ignition:active::before,
+#jaguar-exploded .je-ignition[data-ignited="true"]::before{
+ border-color:#ff6b60;box-shadow:0 0 9px #ff3027,inset 0 0 9px #ff463cc9;
+}
+#jaguar-exploded .je-ignition:active .je-ignition-face,
+#jaguar-exploded .je-ignition[data-ignited="true"] .je-ignition-face{
+ color:#ff9e94;filter:none;text-shadow:0 0 4px #ff5149,0 0 12px #ff2319;
+ background:radial-gradient(ellipse at 40% 24%,#30202a 0%,#170d17 54%,#09060c 100%);
+}
+#jaguar-exploded .je-ignition[data-ignited="true"]{animation:je-ignition-confirm .85s ease-out forwards;pointer-events:none}
+@keyframes je-ignition-confirm{0%,60%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){#jaguar-exploded .je-ignition[data-ignited="true"]{animation:none}}
 </style><script src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js" onload="lucide.createIcons()"></script></body></html>
