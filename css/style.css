@@ -1764,4 +1764,7 @@ hr.divider {
 
 /* Direct-link simulation; intentionally absent from navigation. */
 [data-section="exchange-pulses"] { padding: 0; }
-[data-section="exchange-pulses"] iframe { display: block; width: 100%; height: calc(100dvh - var(--header-height)); border: 0; }
+[data-section="exchange-pulses"] iframe { display: block; width: 100%; height: 100dvh; border: 0; }
+
+body:has([data-section="exchange-pulses"].active) > header { display: none; }
+body:has([data-section="exchange-pulses"].active) > main { margin-top: 0; }
