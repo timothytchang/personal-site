@@ -32,6 +32,15 @@ if ('scrollRestoration' in history) {
 
         if (!targetSection) return;
 
+        // Load the unlisted simulator only on its route; unload when leaving
+        // so hidden playback and searches do not continue in the background.
+        const simulator = document.querySelector('[data-section="exchange-pulses"] iframe');
+        if (simulator && targetId === 'exchange-pulses') {
+            if (!simulator.hasAttribute('src')) simulator.src = simulator.dataset.src;
+        } else if (simulator) {
+            simulator.removeAttribute('src');
+        }
+
         // If already on this section, just return
         if (currentSection === targetSection) {
             return;

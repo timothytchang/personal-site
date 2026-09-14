@@ -1761,3 +1761,7 @@ hr.divider {
 .essay-body > .essay-section-group:not(:first-child) {
     margin-top: var(--space-32);
 }
+
+/* Direct-link simulation; intentionally absent from navigation. */
+[data-section="exchange-pulses"] { padding: 0; }
+[data-section="exchange-pulses"] iframe { display: block; width: 100%; height: calc(100dvh - var(--header-height)); border: 0; }
