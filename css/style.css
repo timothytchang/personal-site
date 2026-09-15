@@ -1804,15 +1804,15 @@ body:has([data-section="exchange-pulses"].active) > header { display: none; }
 body:has([data-section="exchange-pulses"].active) > main { margin-top: 0; }
 
 /* Homepage: all information visible in the central column. */
-.home-reading { grid-column: 4 / 10; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+.home-reading { grid-column: 4 / 10; min-width: 0; min-height: calc(100svh - var(--header-height) - var(--space-32) - 24px); display: flex; flex-direction: column; gap: 24px; }
 body:has([data-section="about"].active) > header { display: none; }
 body:has([data-section="about"].active) > main { margin-top: 0; }
 [data-section="about"] { box-sizing: border-box; padding: calc(var(--header-height) + var(--space-32)) 0 24px; }
 .home-principle h1 { font-size: clamp(26px, 4.5svh, 40px); font-weight: 500; line-height: 1.1; letter-spacing: -.8px; margin: 0; }
 .home-principle h1 span { display: block; }
 .home-principle h1 span + span { margin-top: 8px; }
-.home-introduction { font-size: 16px; line-height: 1.3; letter-spacing: -.2px; margin: 16px 0 0; }
-.home-details { display: flex; flex-direction: column; gap: 14px; }
+.home-introduction { font-size: 16px; line-height: 1.3; letter-spacing: -.2px; margin: 24px 0 0; }
+.home-details { margin-top: auto; display: flex; flex-direction: column; gap: 14px; }
 .home-group-label { font-size: 14px; font-weight: 400; line-height: 1.3; letter-spacing: 0; text-transform: uppercase; margin: 0 0 5px; }
 .home-group { font-size: 18px; line-height: 1.3; }
 .home-group p { font-size: inherit; margin: 0 0 6px; }
