@@ -30,7 +30,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png?v=6">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5">
 
-    <link rel="stylesheet" href="css/style.css?v=home-screen-20260914">
+    <link rel="stylesheet" href="css/style.css?v=home-open-20260914">
 
     <!-- Strip hash before browser renders so it can't fragment-scroll.
          nav.js reads __initialHash and restores the URL after switching. -->
@@ -71,11 +71,10 @@
                     <p class="home-introduction">I’m Timo Chang, and this is my life’s work.</p>
                 </div>
                 <div class="home-details">
-                    <div class="home-tabs" role="tablist" aria-label="About Timo"><button type="button" role="tab" id="home-tab-0" aria-controls="home-panel-0" aria-selected="true" tabindex="0">Current</button><button type="button" role="tab" id="home-tab-1" aria-controls="home-panel-1" aria-selected="false" tabindex="-1">Previous</button><button type="button" role="tab" id="home-tab-2" aria-controls="home-panel-2" aria-selected="false" tabindex="-1">Sidequests</button><button type="button" role="tab" id="home-tab-3" aria-controls="home-panel-3" aria-selected="false" tabindex="-1">Inspirations</button></div>
-                    <div class="home-group" role="tabpanel" id="home-panel-0" aria-labelledby="home-tab-0" tabindex="0"><p>New paradigms for quantum information processing (Stanford).</p><p><a href="#engineering">On Great Quantum Engineering</a></p></div>
-                    <div class="home-group" role="tabpanel" id="home-panel-1" aria-labelledby="home-tab-1" tabindex="0" hidden><p>Tabletop dark matter detector with part-per-billion sensitivity (Williams College).</p><p>Tactical simulation software for asteroid-bound explosive ordnance (Lawrence Livermore).</p></div>
-                    <div class="home-group" role="tabpanel" id="home-panel-2" aria-labelledby="home-tab-2" tabindex="0" hidden><p><a href="#photographs">Landscape photography</a>; <a href="#recipes">cooking</a>; violin; golfing.</p></div>
-                    <div class="home-group" role="tabpanel" id="home-panel-3" aria-labelledby="home-tab-3" tabindex="0" hidden><p>Steve Jobs; Claude Monet; Kanye West; Peter Zumthor; Dieter Rams; Ian Callum; Richard Hamming.</p></div>
+                    <div class="home-group"><h2 class="home-group-label">Current</h2><p>New paradigms for quantum information processing (Stanford).</p><p><a href="#engineering">On Great Quantum Engineering</a></p></div>
+                    <div class="home-group"><h2 class="home-group-label">Previous</h2><p>Tabletop dark matter detector with part-per-billion sensitivity (Williams College).</p><p>Tactical simulation software for asteroid-bound explosive ordnance (Lawrence Livermore).</p></div>
+                    <div class="home-group"><h2 class="home-group-label">Sidequests</h2><p><a href="#photographs">Landscape photography</a>; <a href="#recipes">cooking</a>; violin; golfing.</p></div>
+                    <div class="home-group"><h2 class="home-group-label">Creative Inspirations</h2><p>Steve Jobs; Claude Monet; Kanye West; Peter Zumthor; Dieter Rams; Ian Callum; Richard Hamming.</p></div>
                 </div>
                 <p class="home-contact">timo [at] timochang [dot] com</p>
             </div></div>
@@ -621,32 +620,5 @@
     <script src="js/nav.js?v=11"></script>
     <script src="js/gallery.js?v=2"></script>
     <script src="js/recipe.js?v=3"></script>
-<script>
-(() => {
-    const tabs = Array.from(document.querySelectorAll('.home-tabs [role="tab"]'));
-    function select(tab) {
-        for (const item of tabs) {
-            const selected = item === tab;
-            item.setAttribute('aria-selected', String(selected));
-            item.tabIndex = selected ? 0 : -1;
-            document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
-        }
-    }
-    for (const [index, tab] of tabs.entries()) {
-        tab.addEventListener('click', () => select(tab));
-        tab.addEventListener('keydown', event => {
-            let next;
-            if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-            if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
-            if (event.key === 'Home') next = 0;
-            if (event.key === 'End') next = tabs.length - 1;
-            if (next === undefined) return;
-            event.preventDefault();
-            select(tabs[next]);
-            tabs[next].focus();
-        });
-    }
-})();
-</script>
 </body>
 </html>
