@@ -1,10 +1,12 @@
 import {math,ket,sub} from './math.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// Canvas labels need the webfont before textures are drawn.
+await document.fonts.load('48px "ABC Areal"').catch(() => []);
 const orange=0xcc5500;
 const V=(x,y,z)=>new THREE.Vector3(x,y,z);
 function label(text,position,size=.28,color='#000'){
- const c=document.createElement('canvas');c.width=512;c.height=96;const ctx=c.getContext('2d');ctx.font='48px Helvetica, Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(text,256,48);
+ const c=document.createElement('canvas');c.width=512;c.height=96;const ctx=c.getContext('2d');ctx.font='48px "ABC Areal", Helvetica, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(text,256,48);
  const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;
  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,depthTest:false,transparent:true}));sprite.position.copy(position);sprite.scale.set(size*512/96,size,1);return sprite;
 }

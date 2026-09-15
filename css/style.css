@@ -1,3 +1,9 @@
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-RegularItalic.woff2") format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-MediumItalic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"ABC Areal";src:url("https://timochang.com/fonts/areal/ABCAreal-BoldItalic.woff2") format("woff2");font-weight:700;font-style:italic;font-display:swap}
 /* ==========================================================================
    International Typographic Style (Swiss Style)
    Philosophy: "Maximum meaning, minimum ink."
@@ -80,8 +86,8 @@ button {
     --color-text: #000000;
     --color-accent: #CC5500;
 
-    /* Typography - Helvetica */
-    --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* Typography - ABC Areal */
+    --font-primary: "ABC Areal",Helvetica,sans-serif;
     --font-weight-regular: 400;
     --font-weight-medium: 500;
     
@@ -200,7 +206,7 @@ em, i {
 
 /* ==========================================================================
    12-Column Asymmetric Grid System
-   Desktop: Meta (1-4) | Content (5-9) | Void (10-12)
+   Desktop: 25–50–25 — Meta (1–3) | Content (4–9) | Void (10–12)
    Single shared declaration — every section-level container composes onto this.
    ========================================================================== */
 .grid,
@@ -221,7 +227,7 @@ em, i {
    Makes the meta/content asymmetry self-documenting in CSS. The divider rows
    keep their grid-column override since a bare <hr> has no area. */
 .about-grid {
-    grid-template-areas: "meta meta meta meta content content content content content content content content";
+    grid-template-areas: "meta meta meta content content content content content content . . .";
 }
 
 /* ==========================================================================
@@ -253,7 +259,7 @@ header.header-hidden {
 }
 
 .site-title {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     display: flex;
     align-items: baseline;
 }
@@ -289,7 +295,7 @@ header.header-hidden {
 }
 
 nav {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
     display: flex;
     gap: var(--space-32);
     align-items: baseline;
@@ -490,7 +496,7 @@ main {
    Recipe/Temporal Timeline Section — uses shared 12-col grid
    ========================================================================== */
 .recipe-sidebar {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     position: sticky;
     top: calc(var(--space-64) + var(--space-32) + var(--space-64));
     align-self: start;
@@ -521,7 +527,7 @@ main {
 }
 
 .recipe-content {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
     min-width: 0;
 }
 
@@ -735,6 +741,12 @@ main {
 .gantt-chart {
     position: relative;
     margin-bottom: var(--space-48);
+    overflow-x: auto;
+}
+
+.gantt-chart > .gantt-time-axis,
+.gantt-chart > .gantt-row-labeled {
+    min-width: 700px;
 }
 
 .gantt-time-axis {
@@ -1059,7 +1071,7 @@ main {
 }
 
 .essay-title {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
     font-size: 42px;
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-h1);
@@ -1069,7 +1081,7 @@ main {
 }
 
 .essay-label {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
     font-size: var(--type-body);
     font-weight: var(--font-weight-regular);
     letter-spacing: var(--tracking-meta);
@@ -1079,7 +1091,7 @@ main {
 }
 
 .essay-epigraph {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
     font-style: italic;
     margin-bottom: var(--space-64);
     padding-left: 0;
@@ -1094,8 +1106,8 @@ main {
 }
 
 /* Subgrid chain: .essay-container (12 cols) → .essay-body → .essay-section-group → .essay-row.
-   Each level inherits the outer 12-col tracks via subgrid, so margin (cols 1–4)
-   and text (cols 5–12) actually align with the page grid rather than re-creating
+   Each level inherits the outer 12-col tracks via subgrid, so margin (cols 1–3)
+   and text (cols 4–9) actually align with the page grid rather than re-creating
    their own 12 fr-tracks per row. */
 .essay-body {
     grid-column: 1 / -1;
@@ -1122,7 +1134,7 @@ main {
 }
 
 .essay-row .essay-margin {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     padding-right: var(--space-24);
     color: var(--color-text);
     /* Take margin content out of row-height calculation — the paragraph
@@ -1132,7 +1144,7 @@ main {
 }
 
 .essay-row .essay-text {
-    grid-column: 5 / -1;
+    grid-column: 4 / 10;
 }
 
 .essay-row .essay-text p {
@@ -1299,7 +1311,7 @@ main {
 }
 
 .gallery-hero-text {
-    grid-column: 7 / -1;
+    grid-column: 4 / 10;
     font-size: 42px;
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-h1);
@@ -1763,6 +1775,28 @@ hr.divider {
 }
 
 /* Direct-link simulation; intentionally absent from navigation. */
+[data-section="engineering"] .essay-container > * {
+    grid-column: 4 / 10;
+    min-width: 0;
+}
+
+[data-section="engineering"] .essay-body,
+[data-section="engineering"] .essay-section-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+}
+
+[data-section="engineering"] .essay-row {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    [data-section="engineering"] .essay-container > * {
+        grid-column: 1 / -1;
+    }
+}
+
 [data-section="exchange-pulses"] { padding: 0; }
 [data-section="exchange-pulses"] iframe { display: block; width: 100%; height: 100dvh; border: 0; }
 

@@ -12,3 +12,6 @@
 
 # Local-only prototype (do not deploy)
 essay-prototype.html
+
+# Licensed webfonts are deployed as assets, never published in the source repository.
+/fonts/areal/
