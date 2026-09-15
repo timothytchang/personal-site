@@ -1805,9 +1805,23 @@ body:has([data-section="exchange-pulses"].active) > main { margin-top: 0; }
 
 /* Homepage: all labels and prose share the middle half of the page. */
 .home-reading { grid-column: 4 / 10; min-width: 0; padding-bottom: 48px; }
-.home-reading .about-title { margin-bottom: 48px; }
+.home-principle { margin-bottom: 96px; }
 .home-group + .home-group { margin-top: 32px; }
 .home-group-label { font-size: 13px; font-weight: 400; line-height: 1.4; letter-spacing: 0; text-transform: uppercase; margin: 0 0 12px; }
 .home-group p { margin-bottom: 12px; }
 .home-group p:last-child { margin-bottom: 0; }
 @media (max-width: 768px) { .home-reading { grid-column: 1 / -1; } }
+
+body:has([data-section="about"].active) > header { display: none; }
+body:has([data-section="about"].active) > main { margin-top: 0; }
+[data-section="about"] { padding-top: 80px; }
+.home-principle h1 { font-size: clamp(32px, 3.3vw, 44px); font-weight: 500; line-height: 1.12; letter-spacing: -1.2px; margin: 0; }
+.home-principle h1 span { display: block; }
+.home-principle h1 span + span { margin-top: 16px; }
+.home-introduction { font-size: 16px; line-height: 1.4; letter-spacing: -0.3px; margin: 32px 0 0; }
+.home-section-links { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 24px; }
+@media (max-width: 768px) {
+    [data-section="about"] { padding-top: 48px; }
+    .home-principle h1 { font-size: 32px; letter-spacing: -0.8px; }
+    .home-principle { margin-bottom: 80px; }
+}
