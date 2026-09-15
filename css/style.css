@@ -1807,7 +1807,7 @@ body:has([data-section="exchange-pulses"].active) > main { margin-top: 0; }
 .home-reading { grid-column: 4 / 10; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
 body:has([data-section="about"].active) > header { display: none; }
 body:has([data-section="about"].active) > main { margin-top: 0; }
-[data-section="about"] { box-sizing: border-box; padding: 24px 0; }
+[data-section="about"] { box-sizing: border-box; padding: calc(var(--header-height) + var(--space-32)) 0 24px; }
 .home-principle h1 { font-size: clamp(26px, 4.5svh, 40px); font-weight: 500; line-height: 1.1; letter-spacing: -.8px; margin: 0; }
 .home-principle h1 span { display: block; }
 .home-principle h1 span + span { margin-top: 8px; }
